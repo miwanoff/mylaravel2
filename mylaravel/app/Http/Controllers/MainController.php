@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Contact;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class MainController extends Controller
 {
@@ -29,15 +30,15 @@ class MainController extends Controller
     public function review_check(Request $request)
     {
         $valid = $request->validate([
-            'email' => 'required|email|max:100',
+            
             'subject' => 'required|min:4|max:100',
             'message' => 'required|min:15|max:500',
         ]);
         $review = new Contact();
-        $review->email = $request->input('email');
+      
         $review->subject = $request->input('subject');
         $review->message = $request->input('message');
-
+        $review->user = Auth::user()->name;
         $review->save();
 
         return redirect()->route('review');
